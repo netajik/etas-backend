@@ -34,7 +34,7 @@ public class BookingController {
 		return new ResponseEntity<Object>(response, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = Mappings.BOOKING_REQUEST_STATUS, method = RequestMethod.POST)
+	@RequestMapping(value = Mappings.BOOKING_REQUEST_STATUS, method = RequestMethod.GET)
 	public ResponseEntity<Object> getRequestStatus(@PathVariable Integer requestId) throws Exception {
 		log.debug("Request received for:" + Mappings.BOOKING_REQUEST_STATUS);
 		Map<String, Object> response = bookingService.getRequestStatus(requestId);
@@ -42,10 +42,10 @@ public class BookingController {
 		return new ResponseEntity<Object>(response, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = Mappings.BOOKING_STATUS, method = RequestMethod.POST)
-	public ResponseEntity<Object> getBookingStatus(@PathVariable Integer requestId) throws Exception {
+	@RequestMapping(value = Mappings.BOOKING_STATUS, method = RequestMethod.GET)
+	public ResponseEntity<Object> getBookingStatus(@PathVariable Integer bookingId) throws Exception {
 		log.debug("Request received for:" + Mappings.BOOKING_STATUS);
-		Map<String, Object> response = bookingService.getBookingStatus(requestId);
+		Map<String, Object> response = bookingService.getBookingStatus(bookingId);
 		log.debug("sending response");
 		return new ResponseEntity<Object>(response, HttpStatus.OK);
 	}

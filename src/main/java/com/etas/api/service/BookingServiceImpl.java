@@ -42,7 +42,7 @@ public class BookingServiceImpl implements BookingService {
 		Booking booking = new Booking();
 		Cab cab = cabDao.getAvailableCab();
 		booking.setBookedOn(new Date());
-		booking.setEmployee(employeeDao.findById((Integer) payload.get("driverId")));
+		booking.setEmployee(employeeDao.findById((Integer) payload.get("employeeId")));
 		booking.setSourceLocation(payload.get("sourceLocation").toString());
 		try {
 			booking.setJourneyOn(new SimpleDateFormat("yyyy-MM-dd").parse(payload.get("dateTimeOfJourney").toString()));

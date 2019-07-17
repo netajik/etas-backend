@@ -18,7 +18,7 @@ public class Mappings {
 	
 	public static final String BOOKING_REQUEST = "/request";
 	public static final String BOOKING_REQUEST_STATUS = "/request/{requestId}";
-	public static final String BOOKING_STATUS = "/booking/{bookignId}";
+	public static final String BOOKING_STATUS = "/booking/{bookingId}";
 	
 	
 }
