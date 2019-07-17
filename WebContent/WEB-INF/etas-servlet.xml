@@ -1,0 +1,91 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd 
+       http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+ 
+ 	<!-- Specifying base package of the Components like Controller, Service, 
+		DAO -->
+	<context:component-scan base-package="com.etas.api.config" />
+	<context:component-scan base-package="com.etas.api.controller" />
+	<context:component-scan base-package="com.etas.api.model" />
+	<context:component-scan base-package="com.etas.api.service" />
+	<context:component-scan base-package="com.etas.api.dao" />
+	<mvc:default-servlet-handler />
+	
+	<!-- Getting application properties -->
+	<context:property-placeholder
+		location="classpath:application.properties,
+				  classpath:secret.properties" />
+	<mvc:annotation-driven />
+
+	<!-- Specifying the Resource location to load JS, CSS, Images etc -->
+	<mvc:resources mapping="/resources/**"
+		location="/resources/" />
+ 	
+ 	<!-- View Resolver -->
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	<!-- DataSource -->
+	<bean class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		id="dataSource">
+		<property name="driverClass" value="${database.driver}"></property>
+		<property name="jdbcUrl" value="${database.url}"></property>
+		<property name="user" value="${database.user}"></property>
+		<property name="password" value="${secret.database.password}"></property>
+		<property name="acquireIncrement"
+			value="${database.acquireIncrement}" />
+		<property name="minPoolSize" value="${database.minPoolSize}" />
+		<property name="maxPoolSize" value="${database.maxPoolSize}" />
+		<property name="maxIdleTime" value="${database.maxIdleTime}" />
+	</bean>
+
+	<!-- Hibernate SessionFactory -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+				<prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+			</props>
+		</property>
+		<property name="packagesToScan"
+			value="com.etas.api.model"></property>
+	</bean>
+	
+	<mvc:cors>
+		<mvc:mapping path="/**" allowed-origins="*"
+			allowed-headers="Content-Type, content-type, x-requested-with, Access-Control-Allow-Origin, Access-Control-Allow-Headers, x-auth-token, x-app-id, Origin,Accept, X-Requested-With, Access-Control-Request-Method, Access-Control-Request-Headers"
+			allowed-methods="*"
+			exposed-headers="x-auth-token, Access-Control-Allow-Origin" />
+	</mvc:cors>
+	<mvc:resources mapping="/resources/**"
+		location="file:C:\\Users\\etas\\eclipse-workspace"></mvc:resources>
+	<!-- Transaction -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<mvc:annotation-driven />
+
+	<tx:annotation-driven
+		transaction-manager="transactionManager" />
+	<task:annotation-driven />
+ 
+</beans>
